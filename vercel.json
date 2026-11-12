@@ -1,0 +1,21 @@
+{
+  "redirects": [
+    {
+      "source": "/(designs|v[0-9]+)(/.*)?",
+      "has": [{ "type": "query", "key": "lang", "value": "en" }],
+      "destination": "/?lang=en",
+      "permanent": false
+    },
+    {
+      "source": "/(designs|v[0-9]+)(/.*)?",
+      "has": [{ "type": "query", "key": "lang", "value": "ar" }],
+      "destination": "/?lang=ar",
+      "permanent": false
+    },
+    {
+      "source": "/(designs|v[0-9]+)(/.*)?",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
+}

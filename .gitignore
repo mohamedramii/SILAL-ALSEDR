@@ -1,0 +1,15 @@
+node_modules
+dist
+.vercel
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+
+# profile photos that neither design uses (kept on disk only)
+public/img/pdf-p02-02*.webp
+public/img/pdf-p03-65*.webp
+public/img/pdf-p03-68-sm.webp
+public/img/pdf-p05-26*.webp
+public/img/pdf-p06-54*.webp

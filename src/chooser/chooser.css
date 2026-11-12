@@ -1,0 +1,175 @@
+/* The chooser: the two designs on warm paper, the logo's greens for what you can press. */
+:root {
+  --navy: #2f4426;
+  --navy-deep: #f4f1e8;
+  --yellow: #5a7848;
+  --ink: #22301c;
+  --muted: #5d6b55;
+}
+body {
+  background: var(--navy-deep);
+  color: var(--ink);
+  font-family: 'DM Sans', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+}
+:lang(ar) body,
+html[lang='ar'] body {
+  font-family: 'IBM Plex Sans Arabic', 'DM Sans', sans-serif;
+}
+.ch {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px clamp(16px, 4vw, 48px) 64px;
+}
+.ch-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.ch-lang {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid var(--yellow);
+  border-radius: 999px;
+  color: var(--yellow);
+  font-weight: 600;
+}
+.ch-lang:hover,
+.ch-lang:focus-visible {
+  background: var(--yellow);
+  color: #fff;
+}
+.ch-head {
+  padding: clamp(40px, 8vw, 96px) 0 clamp(28px, 5vw, 56px);
+  max-width: 900px;
+}
+.ch-eyebrow {
+  color: var(--yellow);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+html[lang='ar'] .ch-eyebrow {
+  letter-spacing: 0;
+}
+.ch-head h1 {
+  margin-top: 12px;
+  font-family: 'El Messiri', 'DM Sans', serif;
+  font-weight: 400;
+  font-size: clamp(48px, 9vw, 112px);
+  line-height: 0.92;
+  color: var(--ink);
+}
+html[lang='ar'] .ch-head h1 {
+  font-family: 'El Messiri', serif;
+  font-weight: 600;
+  font-size: clamp(34px, 6vw, 68px);
+  line-height: 1.3;
+}
+.ch-lead {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: clamp(16px, 1.6vw, 19px);
+  line-height: 1.6;
+  max-width: 62ch;
+}
+html[lang='ar'] .ch-lead {
+  line-height: 1.9;
+}
+.ch-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+}
+.ch-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 18px 40px -24px rgba(47, 68, 38, 0.45);
+  outline: 1.5px solid rgba(251, 216, 4, 0);
+  transition: outline-color 0.25s, transform 0.35s var(--ease-out);
+}
+.ch-card:hover,
+.ch-card:focus-visible {
+  outline-color: var(--yellow);
+  transform: translateY(-4px);
+}
+.ch-card__shot {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: radial-gradient(circle at 30% 20%, #dfe9cf, #b9cf98 70%);
+}
+.ch-card__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ch-card__soon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: 'El Messiri', 'DM Sans', serif;
+  font-size: 140px;
+  color: rgba(90, 120, 72, 0.25);
+}
+.ch-card__n {
+  position: absolute;
+  inset-inline-start: 14px;
+  top: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: #fff;
+  font-family: 'El Messiri', 'DM Sans', serif;
+  font-size: 20px;
+  line-height: 1;
+}
+.ch-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 24px;
+  flex: 1;
+}
+.ch-card h2 {
+  font-family: 'El Messiri', 'DM Sans', serif;
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--yellow);
+}
+html[lang='ar'] .ch-card h2 {
+  font-family: 'El Messiri', serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.4;
+}
+.ch-card p {
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+html[lang='ar'] .ch-card p {
+  line-height: 1.9;
+}
+.ch-card__open {
+  font-weight: 600;
+  color: var(--ink);
+  display: inline-flex;
+  gap: 8px;
+}
+.ch-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 48px;
+  color: var(--muted);
+}
+.ch-foot a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
