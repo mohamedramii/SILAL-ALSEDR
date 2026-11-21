@@ -6,7 +6,7 @@ import { Icon } from '@shared/Icon.jsx';
 import { Leaf01Icon, JarIcon, Apple01Icon, Store01Icon, BookOpen01Icon, InstagramIcon } from '@hugeicons/core-free-icons';
 import { gsap } from '@shared/gsap.js';
 import { COPY, wa } from './copy.js';
-import { Ext, Arrow, WaIcon, Leaf, isReduced, DoubleOval, leafPath, ribPath } from './bits.jsx';
+import { Ext, Arrow, WaIcon, Leaf, isReduced, DoubleOval, leafPath, ribPath, useMedia } from './bits.jsx';
 
 const PILLAR_LEAVES = ['light', 'dark', 'light', 'dark'];
 
@@ -53,17 +53,21 @@ export function Founder() {
   const { lang } = useLang();
   const c = COPY[lang].founder;
   const q = useRef(null);
+  const narrow = useMedia('(max-width: 899px)');
   useLayoutEffect(() => {
     if (isReduced()) return undefined;
+    // phones: the quote sits low on the screen when the section comes to rest, so it must be fully lit as soon as it
+    // is all on screen (with the wide timing its last line stayed faint)
+    const range = narrow ? { start: 'top 100%', end: 'bottom 93%' } : { start: 'top 82%', end: 'bottom 52%' };
     const ctx = gsap.context(() => {
       gsap.fromTo(
         q.current.querySelectorAll('.w'),
         { opacity: 0.16 },
-        { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: q.current, start: 'top 82%', end: 'bottom 52%', scrub: true } }
+        { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: q.current, ...range, scrub: true } }
       );
     }, q);
     return () => ctx.revert();
-  }, [lang]);
+  }, [lang, narrow]);
   const words = c.quote.split(' ');
   return (
     <section className="founder" id="founder" data-fit aria-labelledby="founder-title">

@@ -5,16 +5,15 @@ import { useLang } from '@shared/i18n.jsx';
 import { MotionToggle } from '@shared/motion.jsx';
 import { ScrollTrigger } from '@shared/gsap.js';
 import { useSmoothScroll } from '@shared/useSmoothScroll.js';
-import { Header /* PARKED: , Footer */ } from './Chrome.jsx';
+import { Header, Footer } from './Chrome.jsx';
 import Hero from './Hero.jsx';
 import Services from './Services.jsx';
-// PARKED until the client approves the first part (top → services tree): uncomment these with the sections below.
-// import Varieties from './Varieties.jsx';
-// import Where from './Where.jsx';
-// import Vision from './Vision.jsx';
-// import Why from './Why.jsx';
-// import Contact from './Contact.jsx';
-import { About /* PARKED: , Founder, Products, Workshops */ } from './Sections.jsx';
+import Varieties from './Varieties.jsx';
+import Where from './Where.jsx';
+import Vision from './Vision.jsx';
+import Why from './Why.jsx';
+import Contact from './Contact.jsx';
+import { About, Founder, Products, Workshops } from './Sections.jsx';
 import { FruitDefs } from './bits.jsx';
 
 export default function App() {
@@ -33,17 +32,16 @@ export default function App() {
         <Hero />
         <About />
         <Services />
-        {/* PARKED until the client approves the first part (top → services tree): uncomment to bring everything below back. */}
-        {/* <Varieties /> */}
-        {/* <Where /> */}
-        {/* <Founder /> */}
-        {/* <Vision /> */}
-        {/* <Why /> */}
-        {/* <Products /> */}
-        {/* <Workshops /> */}
-        {/* <Contact /> */}
+        <Varieties />
+        <Where />
+        <Founder />
+        <Vision />
+        <Why />
+        <Products />
+        <Workshops />
+        <Contact />
       </main>
-      {/* <Footer /> */}
+      <Footer />
       <MotionToggle />
     </>
   );

@@ -178,6 +178,28 @@ export default function Services() {
           </div>
         </div>
 
+        {/* phones: the eight texts, unseen, in the panel's place: the row is as tall as the longest, so the tree above
+            keeps one size from branch to branch */}
+        {!wide ? (
+          <div className="svc-sizer" aria-hidden="true">
+            {items.map((it) => (
+              <div className="svc-panel__body" key={it.key}>
+                <p className="svc-panel__n">
+                  <span>00</span> / 00
+                </p>
+                <h3 className="svc-panel__t">{it.title}</h3>
+                {it.where ? <p className="svc-panel__where">{it.where}</p> : null}
+                <p className="svc-panel__x">{it.text}</p>
+                <div className="svc-panel__row">
+                  <span className="btn btn--wa btn--sm">
+                    <WaIcon size={18} /> {c.ask}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
         <article className="svc-panel" aria-live="polite" key={`${lang}-${active}`}>
           <figure className="svc-panel__ph">
             <img src={`/img/${m.img}.webp`} alt={m[lang]} width="960" height="720" loading="lazy" decoding="async" />

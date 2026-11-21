@@ -7,11 +7,13 @@ import { Icon } from '@shared/Icon.jsx';
 import { scrollToId } from '@shared/useSmoothScroll.js';
 import { Menu01Icon, Cancel01Icon, Store01Icon, InstagramIcon, TiktokIcon, Pdf01Icon, BookOpen01Icon, ArrowUp01Icon, Location01Icon } from '@hugeicons/core-free-icons';
 import { COPY, wa } from './copy.js';
-import { Ext, WaIcon, isReduced, headerH } from './bits.jsx';
+import { Ext, WaIcon, isReduced } from './bits.jsx';
 
+// no offset here: the header's height comes off through the page's scroll-padding-top (styles.css), which the smooth
+// scroller and the browser both apply; an offset on top of it stopped every menu link short of its section
 const go = (e, id) => {
   e.preventDefault();
-  scrollToId(id, -headerH());
+  scrollToId(id, 0);
   history.replaceState(null, '', `#${id}`);
 };
 

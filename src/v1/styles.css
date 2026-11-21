@@ -47,6 +47,8 @@ html[lang='en'] {
   }
 }
 
+/* the header's height is taken off every jump to a section here, once: the smooth scroller and the browser both read
+   it, so the sections carry no scroll margin of their own and the menu passes no offset */
 html {
   background: var(--paper);
   scroll-padding-top: var(--hh);
@@ -95,11 +97,9 @@ main:focus {
 /* ---------- shared bits ---------- */
 [data-fit] {
   min-height: var(--fit);
-  scroll-margin-top: var(--hh);
 }
 section {
   position: relative;
-  scroll-margin-top: var(--hh);
 }
 .eyebrow {
   display: inline-flex;
@@ -368,8 +368,12 @@ html[lang='ar'] .hdr__lang {
   color: var(--ink);
 }
 .sheet {
-  position: fixed;
-  inset: var(--hh) 0 0;
+  /* hung under the sticky header, not fixed: the header's backdrop-filter makes it the containing block of a fixed
+     child in current browsers, which squeezed a fixed sheet into a strip */
+  position: absolute;
+  inset: 100% 0 auto;
+  height: calc(100vh - var(--hh));
+  height: calc(100dvh - var(--hh));
   z-index: 59;
   display: flex;
   flex-direction: column;
@@ -537,7 +541,8 @@ html[lang='en'] .hero__title-2 {
   width: min(calc(100% + var(--ext)), calc(var(--sh) * var(--ratio)));
   margin-block: clamp(-12px, -1vh, 0px) 0;
   margin-inline-end: calc(-1 * var(--ext));
-  touch-action: none;
+  /* a finger on the branch still scrolls the page; only the scion itself is dragged */
+  touch-action: pan-y;
 }
 .gstage {
   position: relative;
@@ -578,7 +583,7 @@ html[dir='ltr'] .gstage {
   height: 62px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  touch-action: none;
+  touch-action: manipulation;
   z-index: 3;
 }
 .graft-target:disabled {
@@ -893,6 +898,10 @@ html.motion-reduced .hero.is-grafted .hero__done {
     padding-top: 12px;
     padding-bottom: 16px;
     row-gap: 4px;
+    /* phone sizes come from the small viewport height only, so nothing moves when the browser bar hides:
+       --psh the graft stage; --sub-on 0px below 880px of height and 1px from there (the sub line is shown) */
+    --psh: clamp(112px, 18svh, 190px);
+    --sub-on: clamp(0px, calc((100svh - 880px) * 999), 1px);
   }
   .hero__head {
     grid-area: photo;
@@ -902,6 +911,7 @@ html.motion-reduced .hero.is-grafted .hero__done {
   }
   .hero__head .eyebrow {
     color: var(--gold-2);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
   }
   .hero__title {
     color: #fff;
@@ -911,8 +921,11 @@ html.motion-reduced .hero.is-grafted .hero__done {
   .hero__title-2 {
     color: var(--gold-2);
   }
+  /* the lead sits in the room kept for the lines that appear after grafting, so the first screen has no empty band */
   .hero__lead {
-    display: none;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.7;
   }
   .hero__actions {
     display: grid;
@@ -927,8 +940,10 @@ html.motion-reduced .hero.is-grafted .hero__done {
     min-height: 44px;
     padding: 6px 16px;
   }
+  /* the photo takes the height the stage and the lines under it leave (the taller of the hint and the lines that
+     follow the graft: 192px, 254px with the sub line), so the first screen is full in both states */
   .hero__photo {
-    height: clamp(220px, 38svh, 460px);
+    height: clamp(210px, calc(100svh - var(--hh) - var(--psh) - 234px - var(--sub-on) * 62), 460px);
     width: 100%;
     aspect-ratio: auto;
     z-index: 1;
@@ -941,14 +956,15 @@ html.motion-reduced .hero.is-grafted .hero__done {
     position: absolute;
     inset: 0;
     border-radius: 50% 50% 22px 22px / 26% 26% 22px 22px;
-    background: linear-gradient(180deg, rgba(20, 30, 18, 0) 30%, rgba(20, 30, 18, 0.78) 100%);
+    /* measured from the bottom, where the words are, so the small line above the title stays readable on a short photo */
+    background: linear-gradient(180deg, rgba(20, 30, 18, 0) calc(100% - 270px), rgba(20, 30, 18, 0.52) calc(100% - 170px), rgba(20, 30, 18, 0.8) 100%);
   }
   .hero__photo img {
     object-position: 50% 40%;
     border-radius: 50% 50% 22px 22px / 26% 26% 22px 22px;
   }
   .hero__stage {
-    --sh: clamp(112px, 18svh, 190px);
+    --sh: var(--psh);
     --ext: var(--pad);
     margin-block: 2px;
   }
@@ -956,15 +972,10 @@ html.motion-reduced .hero.is-grafted .hero__done {
     font-size: 15px;
   }
   .hero__sub {
+    max-height: calc(var(--sub-on) * 400);
+    margin-top: calc(var(--sub-on) * 6);
+    overflow: hidden;
     font-size: 15px;
-  }
-}
-@media (max-width: 1023px) and (max-height: 880px) {
-  .hero__photo {
-    height: clamp(210px, 40svh, 420px);
-  }
-  .hero__sub {
-    display: none;
   }
 }
 
@@ -1056,14 +1067,22 @@ html[dir='rtl'] .about__pillars svg {
 }
 @media (max-width: 899px) {
   .about {
-    grid-template-columns: 1fr;
-    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
     gap: 14px;
   }
+  /* the photo takes the room the text leaves on the screen, from a strip up to a full picture */
   .about__ph {
-    height: clamp(110px, 20svh, 220px);
+    flex: 1 1 110px;
+    min-height: 110px;
+    max-height: 360px;
+    height: auto;
   }
   .about__ph img {
+    position: absolute;
+    inset: 0;
     border-radius: var(--r);
     border-start-start-radius: 40% 60%;
   }
@@ -1092,13 +1111,6 @@ html[dir='rtl'] .about__pillars svg {
 /* ---------- services: the growing tree (a real tree in layers) ---------- */
 .svc {
   background: var(--paper);
-}
-/* PARKED sections: while the page ends at this tree, the pinned scene has no section after it to scroll against. On
-   phones the browser bar hides as you scroll, the screen gets taller than the stage, and the last branch would stop
-   just short of fully grown; this gives the page that difference. It only applies while the tree is the last section,
-   so it switches itself off when the parked sections come back. */
-.svc:last-child {
-  padding-bottom: calc(100lvh - 100svh);
 }
 .svc__stage {
   display: grid;
@@ -1333,9 +1345,11 @@ html[dir='rtl'] .svc-pt.is-left .svc-node {
   cursor: default;
 }
 @media (max-width: 899px) {
+  /* the tree takes all the room the heading and the text leave; the text row is as tall as the longest of the eight
+     texts (the hidden sizer below), so the tree keeps one size from branch to branch */
   .svc__stage {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas: 'head' 'tree' 'panel';
     row-gap: 8px;
     padding-top: 12px;
@@ -1348,12 +1362,23 @@ html[dir='rtl'] .svc-pt.is-left .svc-node {
   .svc__head .h2 {
     font-size: clamp(23px, 6.6vw, 30px);
   }
-  .svc__tree {
-    height: clamp(204px, 31svh, 330px);
+  /* phones show only the numbers at the branch tips, so the tree may be as tall as its row */
+  .ptree {
+    height: min(100cqh, calc((100cqw - 100px) * 1.8), 460px);
+  }
+  .svc-sizer {
+    grid-area: panel;
+    display: grid;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .svc-sizer > * {
+    grid-area: 1 / 1;
   }
   .svc-panel {
     grid-template-rows: auto;
     align-content: start;
+    align-self: start;
     gap: 0;
   }
   .svc-panel__ph {
@@ -1610,10 +1635,15 @@ html[dir='rtl'] .svc-pt.is-left .svc-node {
     padding-inline-start: 0;
     padding-top: 16px;
     padding-bottom: 10px;
-    --card-h: clamp(200px, calc(var(--fit) - 410px), 440px);
+    /* the reels keep a readable size on a phone's real screen (about 650px tall with the browser bars): never under
+       250px tall, which is two full cards and the edge of a third across the screen */
+    --card-h: clamp(250px, calc(var(--fit) - 352px), 380px);
   }
   .var__head {
     padding-inline: var(--pad);
+  }
+  .var__head .eyebrow {
+    display: none;
   }
   .var__big b {
     font-size: clamp(48px, 13vw, 72px);
@@ -1977,15 +2007,19 @@ html.motion-reduced .founder__quote .w {
 }
 @media (max-width: 899px) {
   .founder {
-    grid-template-columns: 1fr;
-    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
     gap: 14px;
     padding-top: 16px;
     padding-bottom: 16px;
   }
+  /* the portrait grows with the room the text leaves on the screen, from a small cut-out up to a large one */
   .founder__ph {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    flex: 1 1 130px;
+    min-height: 130px;
+    max-height: 290px;
     height: auto;
     aspect-ratio: auto;
   }
@@ -1993,8 +2027,12 @@ html.motion-reduced .founder__quote .w {
     display: none;
   }
   .founder__ph img {
-    width: clamp(110px, 32vw, 160px);
-    height: clamp(130px, 38vw, 190px);
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: auto;
+    height: 100%;
+    aspect-ratio: 11 / 13;
     border-radius: 50% 50% 18px 18px / 36% 36% 18px 18px;
   }
   .founder__name {
@@ -2899,6 +2937,12 @@ html.motion-reduced .why-card {
   .field textarea {
     min-height: 46px;
     height: 46px;
+  }
+  /* the box shows one line here: a hint that wraps would show half of its second line */
+  .field textarea::placeholder {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .bubble {
     min-height: 0;
